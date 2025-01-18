@@ -60,9 +60,8 @@ const deleteProject = asyncHandler(async (req, res) => {
     const project = await Projects.findByIdAndDelete(req.params.id);
 
     if (!project) throw new ApiError(404, "Project not found");
-     
-      // Delete image from cloudinary 
-      
+
+    // Delete image from Cloudinary
     if (project.image?.public_id) {
       await deletedFromCloudinary(project.image.public_id);
     }
@@ -70,7 +69,6 @@ const deleteProject = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, project, "Successfully deleted"));
   } catch (error) {
-    
     res.status(500).json({
       message: "Something went wrong when deleting the project",
       error: error.message,
